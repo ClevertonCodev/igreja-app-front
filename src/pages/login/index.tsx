@@ -6,17 +6,13 @@ import { useNavigate } from 'react-router-dom';
 import Botao from "../../components/botao";
 import "./login.scss";
 import Header from "../../components/header";
-import Checkbox from "@mui/material/Checkbox";
-
-
-
 
 const Login = () => {
 
     const [email, setemail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
-
+     
 
     const FormLogin = (evento: React.FormEvent<HTMLFormElement>) => {
         evento.preventDefault(); //ñ reseta a pagina
@@ -24,10 +20,10 @@ const Login = () => {
         axios({
             method: 'post',
             url: 'http://127.0.0.1:8000/api/login',
-            headers: {
-                'Accept': 'application/json',
+            headers: { 
+                'Accept': 'application/json', 
                 'Content-Type': 'application/x-www-form-urlencoded'
-            },
+              },
             data: {
                 email: email,
                 password: password
