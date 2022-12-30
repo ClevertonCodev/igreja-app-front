@@ -5,9 +5,7 @@ import Token from "../../components/token";
 
 const Home = () => {
 
-    const logout = () => {
-       
-      };
+    
 
     axios({
         method: 'get',

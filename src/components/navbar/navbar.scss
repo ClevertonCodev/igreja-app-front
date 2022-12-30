@@ -1,27 +1,49 @@
 #navbar{
    
-    background-color: #104566;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-   
+    background-color: #104566; 
+    font-family: Arial, Helvetica, sans-serif;
 
+}
+
+.dropdown-menu {
+
+    background-color: #104566; 
 }
 .navbar-toggler-icon{
     color: white;
     
 }
 
+.container-fluid{
+    display: flex;
+    
+}
 
 .simbolo{
     margin: auto;
     width: 5rem;
  
 }
+
+#name{
+ margin-left: 33%;
+}
 .navbar-brand{
     
     color: #fff;
+    margin: auto;
+    margin-left: 1%;
     
+    
+}
+
+#botao{
+    color: #fff;
+    cursor: pointer;
+}
+
+#botao:hover{
+    color: #000;
 }
 .navbar-brand:hover{
     
@@ -31,11 +53,55 @@
 
 .navbar-brand:active{
     
-    color: #000;
+    color: none;
     
 }
 
-#inicio, .nav-link{
+#inicio{
     color: #fff;
 }
 
+.nav-link{
+    color: #fff;
+    text-decoration: none;
+   
+}
+
+a:hover {
+    color: #000;
+    background:  #104566;
+  } 
+
+.navbar-toggler{
+    background-color: #fff;
+}
+#navbarNav{
+   
+    margin-right: -5rem;
+}
+@media (max-width: 1000px) {
+.navbar-nav{
+    align-items: center;
+    justify-content: space-between;
+    visibility: visible;
+    overflow-x: auto; 
+     
+}
+
+// .navbar-nav.active{
+//     height: calc(101vh - 50px);
+//     visibility: visible;
+//     overflow-y: auto;
+// }
+
+
+#rotas{
+    height:1000%;
+    
+}
+
+#name{
+    margin-left: 0%;
+   }
+ 
+}

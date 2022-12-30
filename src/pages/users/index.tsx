@@ -8,6 +8,7 @@ import Botao from "../../components/botao";
 import "./users.scss"
 import { useParams, Navigate, useNavigate } from 'react-router-dom';
 import Token from "../../components/token";
+import Alas from "./adm/alas";
 
 
 
@@ -22,10 +23,11 @@ const Users = () => {
     const [cpf, setCpf] = useState('');
     const [telefone, setTelefone] = useState('');
     const [endereço, setEndereço] = useState('');
-    const [alas_id, setAlas] = useState('');
+    const [alas_id, setAlasid] = useState('');
     const { id } = useParams();
     const [paramentros, setParamentros] = useState('');
     const navigate = useNavigate();
+    const [alas, setAlas] = useState<Alas[]>([])
     const data = {
 
         name: name,
@@ -41,7 +43,24 @@ const Users = () => {
 
     }
 
+
     useEffect(() => {
+        axios({
+            method: 'get',
+            url: `http://127.0.0.1:8000/api/v1/alas`,
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': Token()
+            }
+
+        })
+
+            .then((resposta: { data: any; }) => {
+                setAlas(resposta.data)
+
+
+            })
+
         if (id) {
 
 
@@ -65,7 +84,8 @@ const Users = () => {
                     setCpf(resposta.data.cpf)
                     setTelefone(resposta.data.telefone)
                     setEndereço(resposta.data.endereço)
-                    setAlas(resposta.data.alas_id)
+                    setAlasid(resposta.data.alas_id)
+                    setPassword(resposta.data.password)
 
                 })
         }
@@ -88,9 +108,8 @@ const Users = () => {
             })
                 .then((response: { data: any; }) => {
                     if (response.data) {
-                        console.log(response.data);
                         alert('Atualizou com sucesso!');
-                        navigate("/adm")
+                        navigate("/adm/user")
                     }
                 })
 
@@ -134,8 +153,6 @@ const Users = () => {
         <div className="containeer">
 
             <form onSubmit={FormUser} >
-
-
                 <TextField
                     type={"text"}
                     value={name}
@@ -230,17 +247,27 @@ const Users = () => {
                     fullWidth
                     required
                 />
-                <TextField
-                    type={"text"}
-                    value={alas_id}
-                    onChange={evento => setAlas(evento.target.value)}
-                    label="Alas_id"
-                    variant="outlined"
-                    fullWidth
-                />
+                <FormControl fullWidth>
+                    <InputLabel required id="demo-simple-select-label">alas</InputLabel>
+
+                    <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={alas_id}
+                        label="alas"
+                        required
+                        onChange={evento => setAlasid(evento.target.value as any)}
+                    >
+                        {alas.map((resposta) =>
+                            <MenuItem key={resposta.id}
+                                value={resposta.id}>{resposta.name}</MenuItem>
+                        )}
+                    </Select>
+
+                </FormControl>
 
                 <Botao type='submit'>
-                    Enviar
+                    {paramentros ? 'Atualizar' : 'Cadastrar'}
                 </Botao>
 
             </form>

@@ -1,5 +1,5 @@
 export default interface Estacas {
     id: number
-    name:string
+    nome:string
     endereço: string
   }

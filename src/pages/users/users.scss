@@ -5,3 +5,25 @@
     padding: 2rem;
     border: 1.3px solid  #8D9CA6;
   }
+  .thead{
+    background-color: #104566;
+    color: #fff;
+    text-align: center;
+  }
+  .tr:nth-child(even) {
+    background:rgb(204, 225, 230);
+  }
+  .table{
+    max-width: fit-content;
+    overflow: hidden;
+    color: #fff;
+    margin: auto;
+    margin-top: 2rem;
+    text-align: center;
+    border: solid 1px;
+
+  }
+ .rolagem{
+  height: 27rem;
+  overflow-y: auto;
+} 

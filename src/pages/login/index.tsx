@@ -74,7 +74,7 @@ const Login = () => {
                         variant="standard"
                         fullWidth
                         required />
-                    {/* <Checkbox  defaultChecked /> */}
+                
                     <Botao type="submit">
                         Entrar
                     </Botao>
