@@ -57,57 +57,40 @@ const AdmEstacas = () => {
     
         
     return (
-        <div>
-            <Navbar/> 
-            <TableContainer component={Paper}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
+         <div>
+         <Navbar />
+         <div className="rolagem">
 
-                            <TableCell>
-                                Nome da estacas
-                            </TableCell>
+             <table className="table" >
+                 <thead className="thead">
+                     <tr>
+                         <th scope="col">Nome da estacas</th>
+                         <th scope="col">Endereço</th>
+                         <th scope="col"> Editar</th>
+                         <th scope="col">Excluir</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     {estacas.map(resposta =>
+                         <tr className="tr" key={resposta.id}>
 
-                            <TableCell>
-                                Endereço
-                            </TableCell>
-
-                            <TableCell>
-                                Editar
-                            </TableCell>
-
-                            <TableCell>
-                                Excluir
-                            </TableCell>
-
-
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                    {estacas.map(resposta => 
-                        <TableRow key={resposta.id}>
-                            <TableCell>
-                                {resposta.nome}
-                            </TableCell> 
-
-                            <TableCell>
-                               {resposta.endereço}  
-                            </TableCell>
-                            <TableCell>
-                            <Button variant='outlined'  onClick={() => editar(resposta)} >
-                                    Editar
-                            </Button>
-                            </TableCell>
-                            <TableCell>
-                                <Button variant='outlined' color='error' onClick={() => excluir(resposta)} >
-                                    Excluir
-                                </Button>
-                            </TableCell>
-                        </TableRow>)}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        </div>
+                             <td > {resposta.nome}</td>
+                             <td> {resposta.endereço} </td>
+                             <td>
+                                 <Button variant='outlined' onClick={() => editar(resposta)} >
+                                     Editar
+                                 </Button>
+                             </td>
+                             <td>
+                                 <Button variant='outlined' color='error' onClick={() => excluir(resposta)} >
+                                     Excluir
+                                 </Button>
+                             </td>
+                         </tr>)}
+                 </tbody>
+             </table>
+         </div>
+     </div>
     );
  
 }

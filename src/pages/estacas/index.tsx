@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Botao from "../../components/botao";
 import Header from "../../components/header";
+import Navbar from "../../components/navbar";
 import Token from "../../components/token";
-
+import './estacas.scss'
 const EstacaS = () => {
     const navigate = useNavigate();
     const [nome, setNome] = useState('');
@@ -83,8 +84,6 @@ const EstacaS = () => {
     
                     if (response.data) {
                         alert('cadastrado com sucesso')
-                        navigate("/home")
-    
                     }
                 })
                 .catch(function (error) {
@@ -101,11 +100,10 @@ const EstacaS = () => {
 
 
     return (
-        <div>
-            <Header />
+        <div className="body">
+            <Navbar/>
+            <h1 className="estacas">Estacas</h1>
             <div className="container">
-
-                <h1>estacas</h1>
                 <form className="Form" onSubmit={FormEstacas}>
                     <TextField
                         type={"text"}

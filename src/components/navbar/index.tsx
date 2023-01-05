@@ -3,28 +3,47 @@ import './navbar.scss'
 import Simbolo from '../../img/Simbolo2.png'
 import useCookies from "react-cookie/cjs/useCookies";
 import { useNavigate } from 'react-router-dom';
-
-
-
+import Token from '../token';
+import { useState } from 'react';
+import axios from 'axios';
+import Parametros from '../../pages/users/adm/parametros';
 
 const Navbar = () => {
-  var [cookie, setCookie, removeCookie] = useCookies(['name', 'token']);
+  var [cookie, setCookie, removeCookie] = useCookies( ['token']);
   const navigate = useNavigate();
+  const [paramentros, setParamentros] = useState('');
   const logout = () => {
       removeCookie('token')
-      removeCookie('name')
       navigate("/")
   };
+ 
+  if(!paramentros){
+    axios({
+      method: 'get',
+      url: 'http://127.0.0.1:8000/api/v1/me',
+      headers: {
+          'Accept': 'application/json',
+          'Authorization': Token()
+      }
+    })
+      .then((response: { data: any; }) => {
+          setParamentros(response.data)
+      })
+      .catch(function (error) {
+    
+      });
 
-  console.log(cookie)
-  var nome = cookie.name
+  }
+
+  var nome = paramentros['name' as any]
+  
   return (
     <nav id='navbar' className="navbar navbar-expand-lg static-top">
       <div className="container-sm">
       <a className="navbar-brand" href="#">
           <img className='simbolo' src={Simbolo} alt="foto de cristo" />
         </a>
-        <a id='name' className="navbar-brand">Bem-vindo {nome}</a>
+        <a id='name' className="navbar-brand" href="/me" >Bem-vindo {nome}</a>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>

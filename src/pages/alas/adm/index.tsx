@@ -59,69 +59,43 @@ const AdmAlas = () => {
         
     return (
         <div>
-            <Navbar/> 
-            <TableContainer component={Paper}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
+         <Navbar />
+         <div className="rolagem">
 
-                            <TableCell>
-                                Nome da Alas
-                            </TableCell>
+             <table className="table" >
+                 <thead className="thead">
+                     <tr>
+                         <th scope="col">Nome da Alas</th>
+                         <th scope="col">Endereço</th>
+                         <th scope="col"> Estaca</th>
+                         <th scope="col"> Editar</th>
+                         <th scope="col">Excluir</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     {alas.map(resposta =>
+                         <tr className="tr" key={resposta.id}>
 
-                            <TableCell>
-                                Endereço
-                            </TableCell>
-
-                            <TableCell>
-                                Estaca
-                            </TableCell>
-
-                            <TableCell>
-                                Editar
-                            </TableCell>
-
-                            <TableCell>
-                                Excluir
-                            </TableCell>
-
-
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                    {alas.map(resposta => 
-                        <TableRow key={resposta.id}>
-                            <TableCell>
-                                {resposta.name}
-                            </TableCell> 
-
-                            <TableCell>
-                               {resposta.endereço}  
-                            </TableCell>
-
-                            <TableCell>
-                            {resposta.estacas ? resposta.estacas["nome"]: ''} 
-                            </TableCell>
-
-                            <TableCell>
-
-                            <Button variant='outlined'  onClick={() => editar(resposta)} >
-                                    Editar
-                            </Button>
-
-                            </TableCell>
-
-                            <TableCell>
-                                <Button variant='outlined' color='error' onClick={() => excluir(resposta)} >
-                                    Excluir
-                                </Button>
-                            </TableCell>
-
-                        </TableRow>)}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        </div>
+                             <td > {resposta.name}</td>
+                             <td> {resposta.endereço} </td>
+                             <td>
+                                 {resposta.estacas ? resposta.estacas["nome"]: ''}
+                            </td>
+                             <td>
+                                 <Button variant='outlined' onClick={() => editar(resposta)} >
+                                     Editar
+                                 </Button>
+                             </td>
+                             <td>
+                                 <Button variant='outlined' color='error' onClick={() => excluir(resposta)} >
+                                     Excluir
+                                 </Button>
+                             </td>
+                         </tr>)}
+                 </tbody>
+             </table>
+         </div>
+     </div>
     );
 }
 

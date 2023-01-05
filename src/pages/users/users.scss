@@ -1,10 +1,67 @@
 .containeer{
+  margin: auto;
+  margin-top: 2rem;
+  padding: 2rem;
+}
+
+form{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+.MuiFormControl-root{
+  width: 100%;
+}
+.left{
+  left: left;
+  padding: 1rem;
+  width: 50%;
+}
+
+.left > div {
+  margin-top: 1rem ;
+}
+
+.right{
+  width: 50%;
+  padding: 1rem;
+}
+
+.right > div {
+  margin-top: 1rem 
+}
+.botão{
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+}
+.botão > button {
+  padding: 1rem;
+}
+.botão > button:last-child {
+ margin-left: 1rem;
+}
+
+@media (max-width: 767px) {
+.containeer{
     margin: auto;
     margin-top: 2rem;
-    width: 20rem;
     padding: 2rem;
-    border: 1.3px solid  #8D9CA6;
   }
+form{
+  display: flex;
+  flex-direction: column;
+}
+.left{
+  left: none;
+  padding: 1rem;
+  width: 100%;
+}
+.right {
+  width: 100%;
+}
+ 
+}
   .thead{
     background-color: #104566;
     color: #fff;

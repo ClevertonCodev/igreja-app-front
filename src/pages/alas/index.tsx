@@ -3,9 +3,10 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Botao from "../../components/botao";
-import Header from "../../components/header";
+import Navbar from "../../components/navbar";
 import Token from "../../components/token";
 import Estacas from "../users/adm/estacas";
+import './alas.scss'
 
 const Alas = () => {
     const navigate = useNavigate();
@@ -20,9 +21,6 @@ const Alas = () => {
         endereço: endereço,
         estacas_id: estacas_id
     }
-
-    console.log(data)
-
     useEffect(() => {
         axios({
             method: 'get',
@@ -63,7 +61,7 @@ const Alas = () => {
         }
     }, [id]);
 
-    const FormEstacas = (evento: React.FormEvent<HTMLFormElement>) => {
+    const FormAlas = (evento: React.FormEvent<HTMLFormElement>) => {
         evento.preventDefault();
         if (id) {
             axios({
@@ -124,11 +122,10 @@ const Alas = () => {
 
     return (
         <div>
-            <Header />
+            <Navbar/>
+            <h1>Alas</h1>
             <div className="container">
-
-                <h1>alas</h1>
-                <form className="Form" onSubmit={FormEstacas}>
+                <form className="FormAlas" onSubmit={FormAlas}>
                     <TextField
                         type={"text"}
                         value={nome}
@@ -147,7 +144,7 @@ const Alas = () => {
                         required />
 
                     <FormControl fullWidth>
-                        <InputLabel  required id="demo-simple-select-label">Estacas</InputLabel>
+                        <InputLabel variant="standard"  required id="demo-simple-select-label">Estacas</InputLabel>
 
                         <Select
                             labelId="demo-simple-select-label"
@@ -156,6 +153,7 @@ const Alas = () => {
                             value={estacas_id}
                             label="Estacas"
                             required
+                            variant="standard"
                             onChange={evento => setEstacas_id(evento.target.value as any)}
                         >
                             {estacas.map((resposta) =>

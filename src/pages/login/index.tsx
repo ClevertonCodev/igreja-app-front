@@ -12,6 +12,12 @@ const Login = () => {
     const [email, setemail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+    const trueLoogin = () => {
+         navigate('/home');
+         window.location.reload();
+    }
+
+
      
 
     const FormLogin = (evento: React.FormEvent<HTMLFormElement>) => {
@@ -30,25 +36,22 @@ const Login = () => {
             }
         })
 
-
             .then((response: { data: any; }) => {
 
                 if (response.data) {
-                    document.cookie = 'token=' + response.data.token;
-                    document.cookie = 'name=' + response.data.name;
-                    navigate("/home")
-                    window.location.reload()
-
+                   sessionStorage.setItem('token', response.data.token);
+                   document.cookie = 'token=' + response.data.token;
+                   trueLoogin()
                 }
             })
             .catch(function (error) {
                 if (error) {
                     alert(error.response.data.erro)
-                    console.log(error.response.data.erro)
                 }
             });
 
     }
+    
 
 
     return (
@@ -86,4 +89,8 @@ const Login = () => {
 
 export default Login;
 
+
+function reload(arg0: string) {
+    throw new Error("Function not implemented.");
+}
 
