@@ -1,3 +1,8 @@
+#caravanas:disabled{
+    opacity: .4;
+    cursor: default;
+  }
+
 #navbar{
    
     background-color: #104566; 
@@ -51,6 +56,8 @@
     
 }
 
+
+
 .navbar-brand:active{
     
     color: none;
@@ -87,13 +94,6 @@ a:hover {
     overflow-x: auto; 
      
 }
-
-// .navbar-nav.active{
-//     height: calc(101vh - 50px);
-//     visibility: visible;
-//     overflow-y: auto;
-// }
-
 
 #rotas{
     height:1000%;

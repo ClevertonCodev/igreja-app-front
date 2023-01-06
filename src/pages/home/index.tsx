@@ -17,7 +17,7 @@ const Home = () => {
     })
         .then((response: { data: any; }) => {
                  var  resp = response.data
-                 console.log(resp)
+                
         })
         .catch(function (error) {
 

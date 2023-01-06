@@ -39,7 +39,7 @@ const Login = () => {
             .then((response: { data: any; }) => {
 
                 if (response.data) {
-                   sessionStorage.setItem('token', response.data.token);
+                //    sessionStorage.setItem('token', response.data.token);
                    document.cookie = 'token=' + response.data.token;
                    trueLoogin()
                 }
@@ -89,8 +89,4 @@ const Login = () => {
 
 export default Login;
 
-
-function reload(arg0: string) {
-    throw new Error("Function not implemented.");
-}
 
