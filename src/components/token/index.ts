@@ -1,5 +1,5 @@
 function Token(){
-    let token:any = document.cookie.split(';').find(indice => {
+    let token:string | number | any = document.cookie.split(';').find(indice => {
         return indice.includes('token=')
     })
 

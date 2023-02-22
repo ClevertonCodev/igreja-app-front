@@ -11,9 +11,11 @@ const Navbar = () => {
   var [cookie, setCookie, removeCookie] = useCookies(['token']);
   const navigate = useNavigate();
   const [paramentros, setParamentros] = useState('');
+
   const logout = () => {
     removeCookie('token')
     navigate("/")
+    window.location.reload();
   };
 
 
@@ -27,17 +29,17 @@ const Navbar = () => {
         'Authorization': Token()
       }
     })
-      .then((response: { data: any; }) => {
+      .then((response: { data: any ; }) => {
         setParamentros(response.data)
       })
       .catch(function (error) {
-
+        alert('erro');
       });
 
 
 
   }
-  var nome = paramentros['name' as any];
+  var nome = paramentros['name' as any ];
   const type = paramentros['type' as any];
   var validate;
 
@@ -58,7 +60,7 @@ const Navbar = () => {
         <a className="navbar-brand" href="#">
           <img className='simbolo' src={Simbolo} alt="foto de cristo" />
         </a>
-        <a id='name' className="navbar-brand" href="/me" >Bem-vindo {nome}</a>
+        <a id='name' className="navbar-brand" href="/me" >Bem-vindo  {nome}</a>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>

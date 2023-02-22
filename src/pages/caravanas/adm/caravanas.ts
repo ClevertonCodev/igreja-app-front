@@ -1,4 +1,5 @@
 import Estacas from "../../users/adm/estacas";
+import Iveiculos from "../../veiculos/veiculos";
 
   export default interface Caravana  {
     [x: string]: any;
@@ -10,4 +11,5 @@ import Estacas from "../../users/adm/estacas";
     DataHora_retorno: string,
     Status: string,
     estacas_id: Estacas[]
+    veiculos: Iveiculos[]
   }

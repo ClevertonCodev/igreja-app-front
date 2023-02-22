@@ -36,16 +36,14 @@ const Login = () => {
             }
         })
 
-            .then((response: { data: any; }) => {
-
+            .then((response: { data: {token: string}  }) => {
                 if (response.data) {
-                //    sessionStorage.setItem('token', response.data.token);
                    document.cookie = 'token=' + response.data.token;
                    trueLoogin()
                 }
             })
             .catch(function (error) {
-                if (error) {
+                if (error.response?.data?.erro) {
                     alert(error.response.data.erro)
                 }
             });

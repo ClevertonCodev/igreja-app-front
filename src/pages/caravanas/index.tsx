@@ -5,7 +5,8 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import Botao from "../../components/botao";
 import Navbar from "../../components/navbar";
 import Token from "../../components/token";
-import Estacas from "../users/adm/estacas";
+import Estacas from '../users/adm/estacas';
+import Iveiculos from '../veiculos/veiculos';
 
 
 const Caravanas = () => {
@@ -20,6 +21,8 @@ const Caravanas = () => {
     const navigate = useNavigate();
     const { id } = useParams();
     const [estacas, setEstacas] = useState<Estacas[]>([])
+    // const [veiculos, setVeiculos] = useState<Iveiculos[]>([])
+    // const [veiculo, setVeiculo] = useState('');
     const data = {
 
         Nome: nome,
@@ -29,7 +32,6 @@ const Caravanas = () => {
         DataHora_retorno: dataHora_retorno,
         Status: status,
         estacas_id: estacas_id,
-
     }
     if(status == ''){
         setStatus ('Ativa')
@@ -39,7 +41,9 @@ const Caravanas = () => {
         navigate('home');
     }
 
-    useEffect(() => {
+    
+
+    useEffect(() => { 
         axios({
             method: 'get',
             url: `http://127.0.0.1:8000/api/v1/estacas`,
@@ -50,11 +54,11 @@ const Caravanas = () => {
 
         })
 
-            .then((resposta: { data: any; }) => {
+            .then((resposta: { data: Estacas[]; }) => {
                 setEstacas(resposta.data)
 
 
-            })
+            });
 
         if (id) {
 
@@ -78,7 +82,6 @@ const Caravanas = () => {
                     setDataHora_retorno(resposta.data.DataHora_retorno);
                     setStatus(resposta.data.Status);
                     setEstacas_id(resposta.data.estacas_id);
-                    console.log(resposta.data)
                 })
         }
     }, [id]);
@@ -129,7 +132,7 @@ const Caravanas = () => {
                         setDataHora_partida('');
                         setDataHora_retorno('');
                         setStatus('');
-                        setEstacas_id('');
+                        setEstacas_id(''); 
                     }
                 })
 
@@ -138,9 +141,6 @@ const Caravanas = () => {
                     if (error?.response?.data?.errors?.Status) {
                         alert(error.response.data.errors.Status);
                     }
-                   
-
-
                 });
         }
     }
@@ -155,7 +155,7 @@ const Caravanas = () => {
                             type={"text"}
                             value={nome}
                             onChange={evento => setNome(evento.target.value)}
-                            label="Nome do destino"
+                            label="Nome do lider"
                             variant="outlined"
                             required
                         />
@@ -230,7 +230,7 @@ const Caravanas = () => {
                                 value={estacas_id}
                                 label="Estacas"
                                 required
-                                onChange={evento => setEstacas_id(evento.target.value as any)}
+                                onChange={evento => setEstacas_id(evento.target.value)}
                             >
                                 {estacas.map((resposta) =>
                                     <MenuItem key={resposta.id}
@@ -238,6 +238,25 @@ const Caravanas = () => {
                                 )}
                             </Select>
                         </FormControl>
+{/* 
+                        <FormControl>
+                            <InputLabel required id="demo-simple-select-label">Veiculo</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={veiculo}
+                                label="Veiculo"
+                                required
+                                onChange={evento => setVeiculo(evento.target.value)}
+                            >
+                                {veiculos.map((resposta) =>
+                                    <MenuItem key={resposta.id}
+                                        value={resposta.id}>
+                                              {resposta.name}
+                                    </MenuItem>
+                                )}
+                            </Select>
+                        </FormControl> */}
                     </div>
                     <div className="botão">
                         <Botao type='submit'>

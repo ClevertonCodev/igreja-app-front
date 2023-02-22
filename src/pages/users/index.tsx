@@ -48,7 +48,6 @@ const Users = () => {
     const voltar = () => {
         navigate('/adm/user');
     }
-    console.log(url)
     useEffect(() => {
 
         if (url == '/me') {
@@ -126,10 +125,18 @@ const Users = () => {
         }
     }, [id]);
 
-
-
+    function handleInputkey(event: React.KeyboardEvent<HTMLInputElement>) {
+        const input = event.currentTarget;
+        if (/[0-9]/.test(event.key)) {
+          event.preventDefault();
+          console.log(event.key)
+          return;
+        }
+      }
+console.log(name);
     function FormUser(evento: React.FormEvent<HTMLFormElement>) {
         evento.preventDefault();
+
         if (id) {
             axios({
                 method: 'patch',
@@ -206,6 +213,7 @@ const Users = () => {
 
                             type={"text"}
                             value={name}
+                            onKeyPress={handleInputkey}
                             onChange={evento => setName(evento.target.value)}
                             label="Nome"
                             variant="outlined"

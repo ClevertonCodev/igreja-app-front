@@ -1,0 +1,79 @@
+#tableModal {
+    max-width: none;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin: none;
+}
+.conteiner_veiculos{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: space-between;
+    justify-content: space-between;
+    align-items: center;
+    
+} 
+.list{
+    cursor: pointer;
+    list-style: none;
+    margin: auto;
+    margin-top: 10px;
+    border: #104566 1px solid;
+    width: 15rem;
+    padding-left: 3px;
+    border-radius: 10px;
+    text-align: left;
+    background-color: #104566;
+    color: #fff;
+
+}
+.selecionado {
+    margin: auto;
+    margin-top: 10px;
+    list-style: none;
+    cursor: pointer;
+    background-color: rgb(14, 246, 14);
+    color: #000;
+    border:  rgb(14, 246, 14) 1px solid;
+    width: 15rem;
+    padding-left: 1px;
+    border-radius: 10px;
+    text-align: left;
+}
+
+#btn_veiculo{
+    margin-left: 5px;
+}
+#alertred{
+ margin: auto;
+ width: 52%;
+ text-align: center;
+}
+
+.container_titulo{
+    text-align: center;
+    margin: auto;
+}
+
+.modal-header .btn-close {
+    margin: 0px;
+    padding: 0px;
+}
+.modal-header{
+    background-color: #104566;
+    color: #fff;
+}
+
+.close-button{
+    
+        background-image: url(../../img/btn_fechar.png);
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain;
+        border: none;
+        cursor: pointer;
+        height: 30px;
+        width: 30px
+      
+     
+}
