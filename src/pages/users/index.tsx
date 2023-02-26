@@ -129,7 +129,6 @@ const Users = () => {
         const input = event.currentTarget;
         if (/[0-9]/.test(event.key)) {
           event.preventDefault();
-          console.log(event.key)
           return;
         }
       }

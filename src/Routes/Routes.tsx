@@ -15,15 +15,12 @@ import AdmCaravanas from "../pages/caravanas/adm";
 
 
 export default function AppRouter(){
-    var isLogged:boolean = false
-   if(Authorization()){
-    isLogged = true
-   }
+
     return(
         <Router>
             <Routes>   
                 <Route path='/login' element={<Login/>}/>
-                <Route element={<PrivateRoute isLogged={isLogged} />}>
+                <Route element={<PrivateRoute/>}>
                      <Route path='/home' element={<Home/>}/>
                      <Route path="/user" element={<Users/>} />
                      <Route path="/adm/user" element={<AdmUser/>} />

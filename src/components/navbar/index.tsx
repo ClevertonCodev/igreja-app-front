@@ -1,123 +1,186 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './navbar.scss'
-import Simbolo from '../../img/Simbolo2.png'
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./navbar.scss";
+import Simbolo from "../../img/Simbolo2.png";
 import useCookies from "react-cookie/cjs/useCookies";
-import { useNavigate } from 'react-router-dom';
-import Token from '../token';
-import { useState } from 'react';
-import axios from 'axios';
+import { Link, useNavigate } from "react-router-dom";
+import DadosUsuario from "./DadosUsuario";
 
 const Navbar = () => {
-  var [cookie, setCookie, removeCookie] = useCookies(['token']);
+  var [cookie, setCookie, removeCookie] = useCookies(["token", "username"]);
   const navigate = useNavigate();
-  const [paramentros, setParamentros] = useState('');
+  var validate;
+  const nome = DadosUsuario()?.name;
+  const type = DadosUsuario()?.type;
 
   const logout = () => {
-    removeCookie('token')
-    navigate("/")
-    window.location.reload();
+    removeCookie("token");
+    navigate("/");
+    // window.location.reload();
   };
 
-
-  if (!paramentros) {
-
-    axios({
-      method: 'get',
-      url: 'http://127.0.0.1:8000/api/v1/me',
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': Token()
-      }
-    })
-      .then((response: { data: any ; }) => {
-        setParamentros(response.data)
-      })
-      .catch(function (error) {
-        alert('erro');
-      });
-
-
-
+  if (type == "secretarios") {
+    validate = true;
   }
-  var nome = paramentros['name' as any ];
-  const type = paramentros['type' as any];
-  var validate;
-
-  switch (type) {
-    case 'super': validate  =  false;
-      break;
-    case 'secretarios': validate = true;
-      break;
-    case 'comum': validate = false
-      break;
-  }
-
-
 
   return (
-    <nav id='navbar' className="navbar navbar-expand-lg static-top">
+    <nav id="navbar" className="navbar navbar-expand-lg static-top">
       <div className="container-sm">
-        <a className="navbar-brand" href="#">
-          <img className='simbolo' src={Simbolo} alt="foto de cristo" />
-        </a>
-        <a id='name' className="navbar-brand" href="/me" >Bem-vindo  {nome}</a>
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <Link className="navbar-brand" to={"/home"}>
+          <img className="simbolo" src={Simbolo} alt="foto de cristo" />
+        </Link>
+
+        <Link id="name" className="navbar-brand" to="/me">
+          Bem-vindo {nome}
+        </Link>
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
           <span className="navbar-toggler-icon"></span>
         </button>
 
         <div className="collapse navbar-collapse" id="navbarNav">
-          <ul id='rotas' className='navbar-nav ms-auto '>
+          <ul id="rotas" className="navbar-nav ms-auto ">
             <li className="nav-item">
-              <a id='botao' className="nav-link active" aria-current="page" href="/home">Inicio</a>
+              <Link id="botao" className="nav-link active" to="/home">
+                Inicio
+              </Link>
             </li>
             {validate && (
               <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <Link
+                  className="nav-link dropdown-toggle"
+                  to="#"
+                  id="navbarDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
                   Caravanas
-                </a>
-                <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                  <li><a id='botao' className="dropdown-item" href="/caravanas">Cadastrar nova Caravana</a></li>
-                  <li><a id='botao' className="dropdown-item" href="/adm/caravanas">Administração</a></li>
+                </Link>
+                <ul
+                  className="dropdown-menu dropdown-menu-end"
+                  aria-labelledby="navbarDropdown"
+                >
+                  <li>
+                    <Link id="botao" className="dropdown-item" to="caravanas">
+                      Cadastrar nova caravana
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      id="botao"
+                      className="dropdown-item"
+                      to="/adm/caravanas"
+                    >
+                      Administração
+                    </Link>
+                  </li>
                 </ul>
               </li>
             )}
 
             <li className="nav-item dropdown">
-              <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <Link
+                className="nav-link dropdown-toggle"
+                id="navbarDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                to="#"
+              >
                 Estacas
-              </a>
-              <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                <li><a id='botao' className="dropdown-item" href="/estacas">Cadastrar nova Estaca</a></li>
-                <li><a id='botao' className="dropdown-item" href="/adm/estacas">Administração</a></li>
+              </Link>
+
+              <ul
+                className="dropdown-menu dropdown-menu-end"
+                aria-labelledby="navbarDropdown"
+              >
+                <li>
+                  <Link id="botao" className="dropdown-item" to="/estacas">
+                    Cadastrar nova estaca
+                  </Link>
+                </li>
+                <li>
+                  <Link id="botao" className="dropdown-item" to="/adm/estacas">
+                    Administração
+                  </Link>
+                </li>
               </ul>
             </li>
             <li className="nav-item dropdown">
-              <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <Link
+                className="nav-link dropdown-toggle"
+                id="navbarDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                to="#"
+              >
                 Alas
-              </a>
-              <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                <li><a id='botao' className="dropdown-item" href="/alas">Cadastrar nova Ala</a></li>
-                <li><a id='botao' className="dropdown-item" href="/adm/alas">Administração</a></li>
+              </Link>
+
+              <ul
+                className="dropdown-menu dropdown-menu-end"
+                aria-labelledby="navbarDropdown"
+              >
+                <li>
+                  <Link id="botao" className="dropdown-item" to="/alas">
+                    Cadastrar nova ala
+                  </Link>
+                </li>
+                <li>
+                  <Link id="botao" className="dropdown-item" to="/adm/alas">
+                    Administração
+                  </Link>
+                </li>
               </ul>
             </li>
             <li className="nav-item dropdown">
-              <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <Link
+                className="nav-link dropdown-toggle"
+                to="#"
+                id="navbarDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
                 Usuários
-              </a>
-              <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                <li><a id='botao' className="dropdown-item" href="/user">Cadastrar novo usuário</a></li>
-                <li><a id='botao' className="dropdown-item" href="/adm/user">Administração</a></li>
+              </Link>
+              <ul
+                className="dropdown-menu dropdown-menu-end"
+                aria-labelledby="navbarDropdown"
+              >
+                <li>
+                  <Link id="botao" className="dropdown-item" to="/user">
+                    Cadastrar novo usuário
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/adm/user" id="botao" className="dropdown-item">
+                    Administração
+                  </Link>
+                </li>
               </ul>
             </li>
-            <li className="nav-i
-              tem">
-              <a id='botao' className="nav-link" onClick={logout}>Sair </a>
+            <li
+              className="nav-i
+              tem"
+            >
+              <div id="botao" className="nav-link" onClick={logout}>
+                Sair
+              </div>
             </li>
           </ul>
         </div>
       </div>
     </nav>
   );
-}
+};
 
 export default Navbar;

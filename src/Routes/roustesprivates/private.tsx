@@ -1,7 +1,11 @@
 import { Navigate, Outlet } from "react-router-dom";
+import Authorization from "../../components/token/auth";
 
-function PrivateRoute( isLogged: any  ){
-  
+function PrivateRoute( ){
+  let isLogged = false
+  if(Authorization()){
+    isLogged = true
+  }
   return isLogged ? <Outlet /> : <Navigate to="/login" />;
 }
 
