@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../../components/navbar";
 import Users from './users';
-import Token from "../../../components/token";
+import Token from "../../../components/token/Token";
 import '../users.scss'
 
 const AdmUser = () => {

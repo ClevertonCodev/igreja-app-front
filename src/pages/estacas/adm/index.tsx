@@ -1,18 +1,21 @@
-import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Button } from "@mui/material";
+import { Button } from "@mui/material";
 import axios from "axios";
 import React, {  useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
+import Loader from "../../../components/loader";
 import Navbar from "../../../components/navbar";
-import Token from "../../../components/token";
+import Token from "../../../components/token/Token";
 import Estacas from "../../users/adm/estacas";
 
 const AdmEstacas = () => {
     const navigate = useNavigate();
     const [estacas, setEstacas] =useState<Estacas[]>([])
-
+    const [edelete, setDeleteE] = useState<string>()
+    const [estaCarregando, setestaCarregando] = useState<boolean>(true);
 
     
     useEffect(()=>{
+        setestaCarregando(true)
         axios({
             method: 'get',
             url: 'http://127.0.0.1:8000/api/v1/estacas',
@@ -24,12 +27,13 @@ const AdmEstacas = () => {
         })
         .then((resposta: { data: any; }) => {
             setEstacas(resposta.data)
-            console.log(resposta.data)
+            setestaCarregando(false)
    })
        
-    },[]);
+    },[edelete]);
 
     const excluir =(estacasExcluir:Estacas) => {
+        setestaCarregando(true)
         axios({
             method: 'delete',
             url: `http://127.0.0.1:8000/api/v1/estacas/${estacasExcluir.id}`,
@@ -41,8 +45,8 @@ const AdmEstacas = () => {
         })
         .then((excluir: { data: any; }) => {
            if(excluir.data.msg){
+              setDeleteE(excluir.data.msg)
               alert(excluir.data.msg)
-              window.location.reload()
            }
             
         });
@@ -59,6 +63,7 @@ const AdmEstacas = () => {
     return (
          <div>
          <Navbar />
+         {estaCarregando ? <Loader/> : 
          <div className="rolagem">
 
              <table className="table" >
@@ -90,6 +95,7 @@ const AdmEstacas = () => {
                  </tbody>
              </table>
          </div>
+        }
      </div>
     );
  

@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
-import Authorization from "../../components/token/auth";
+import Authorization from "../../components/token/auth/Authorization";
 
 function PrivateRoute( ){
   let isLogged = false

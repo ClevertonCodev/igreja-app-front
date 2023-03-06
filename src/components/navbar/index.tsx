@@ -3,22 +3,25 @@ import "./navbar.scss";
 import Simbolo from "../../img/Simbolo2.png";
 import useCookies from "react-cookie/cjs/useCookies";
 import { Link, useNavigate } from "react-router-dom";
-import DadosUsuario from "./DadosUsuario";
+import UserData from "../../services/UserData";
+
 
 const Navbar = () => {
-  var [cookie, setCookie, removeCookie] = useCookies(["token", "username"]);
+  var [cookie, setCookie, removeCookie] = useCookies(["token"]);
   const navigate = useNavigate();
-  var validate;
-  const nome = DadosUsuario()?.name;
-  const type = DadosUsuario()?.type;
+  var validate: boolean = false;
+  const nome = UserData()?.name;
+  const type = UserData()?.type;
+  
+ 
 
   const logout = () => {
     removeCookie("token");
     navigate("/");
-    // window.location.reload();
+    window.location.reload()
   };
 
-  if (type == "secretarios") {
+  if (type === "secretarios") {
     validate = true;
   }
 
@@ -52,7 +55,7 @@ const Navbar = () => {
               </Link>
             </li>
             {validate && (
-              <li className="nav-item dropdown">
+              <li id="botao" className="nav-item dropdown">
                 <Link
                   className="nav-link dropdown-toggle"
                   to="#"
@@ -68,7 +71,7 @@ const Navbar = () => {
                   aria-labelledby="navbarDropdown"
                 >
                   <li>
-                    <Link id="botao" className="dropdown-item" to="caravanas">
+                    <Link id="botao" className="dropdown-item" to="/caravanas">
                       Cadastrar nova caravana
                     </Link>
                   </li>
@@ -85,7 +88,7 @@ const Navbar = () => {
               </li>
             )}
 
-            <li className="nav-item dropdown">
+            <li id="botao" className="nav-item dropdown">
               <Link
                 className="nav-link dropdown-toggle"
                 id="navbarDropdown"
@@ -113,7 +116,7 @@ const Navbar = () => {
                 </li>
               </ul>
             </li>
-            <li className="nav-item dropdown">
+            <li id="botao" className="nav-item dropdown">
               <Link
                 className="nav-link dropdown-toggle"
                 id="navbarDropdown"
@@ -141,7 +144,7 @@ const Navbar = () => {
                 </li>
               </ul>
             </li>
-            <li className="nav-item dropdown">
+            <li id="botao" className="nav-item dropdown">
               <Link
                 className="nav-link dropdown-toggle"
                 to="#"
@@ -172,9 +175,9 @@ const Navbar = () => {
               className="nav-i
               tem"
             >
-              <div id="botao" className="nav-link" onClick={logout}>
+              <p id="botao" className="nav-link" onClick={logout}>
                 Sair
-              </div>
+              </p>
             </li>
           </ul>
         </div>

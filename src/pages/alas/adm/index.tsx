@@ -1,15 +1,17 @@
-import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Button } from "@mui/material";
+import { Button } from "@mui/material";
 import axios from "axios";
 import React, {  useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
+import Loader from "../../../components/loader";
 import Navbar from "../../../components/navbar";
-import Token from "../../../components/token";
+import Token from "../../../components/token/Token";
 import Alas from "../../users/adm/alas";
-import Estacas from "../../users/adm/estacas";
 
 const AdmAlas = () => {
     const navigate = useNavigate();
     const [alas, setAlas] =useState<Alas[]>([])
+    const[wards, setWards] = useState()
+    const [estaCarregando, setestaCarregando] = useState<boolean>(true);
 
 
     
@@ -25,12 +27,14 @@ const AdmAlas = () => {
         })
         .then((resposta: { data: any; }) => {
             setAlas(resposta.data)
+            setestaCarregando(false)
     
    })
        
-    },[]);
+    },[wards]);
 
     const excluir =(alasExcluir:Alas) => {
+        setestaCarregando(true)
         axios({
             method: 'delete',
             url: `http://127.0.0.1:8000/api/v1/alas/${alasExcluir.id}`,
@@ -42,24 +46,23 @@ const AdmAlas = () => {
         })
         .then((excluir: { data: any; }) => {
            if(excluir.data.msg){
-              alert(excluir.data.msg)
-              window.location.reload()
+            setWards(excluir.data.msg)
+            alert(excluir.data.msg)
+             
            }
             
         });
     }
-
     const editar = (editar:Alas) => {
         if(editar.id){
           navigate(`/adm/alas/${editar.id}`)
         }
 
     }
-    
-        
     return (
         <div>
          <Navbar />
+         { estaCarregando? <Loader/> : 
          <div className="rolagem">
 
              <table className="table" >
@@ -95,6 +98,7 @@ const AdmAlas = () => {
                  </tbody>
              </table>
          </div>
+         }
      </div>
     );
 }

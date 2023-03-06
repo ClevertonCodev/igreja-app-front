@@ -7,22 +7,31 @@ import Botao from "../../components/botao";
 import "./login.scss";
 import Header from "../../components/header";
 import Loader from "../../components/loader";
+import { refreshToken } from "../../services/RefreshToken";
 
 const Login = () => {
 
     const [email, setemail] = useState('');
     const [password, setPassword] = useState('');
-    const [User, setUser] = useState('')
     const navigate = useNavigate();
     const [estaCarregando, setestaCarregando] = useState<boolean>(false);
+    var newToken;
+    var Tokenrefresh: number = 0 
     
     const trueLoogin = () => {
-          navigate('/home');
-        //   window.location.reload();
+        TokenNew()
+        navigate('/home');
     }
 
+    const TokenNew = () => {
+        Tokenrefresh = 7200000; // Tempo em milissegundos
+        newToken = setInterval(() => {refreshToken()}, Tokenrefresh);
+        if(newToken){
+           console.log(refreshToken())
+        }
 
-     
+        
+    }
 
     const FormLogin = (evento: React.FormEvent<HTMLFormElement>) => {
         evento.preventDefault(); //ñ reseta a pagina
@@ -52,9 +61,7 @@ const Login = () => {
                     setestaCarregando(false);
                 }
             });
-
     }
-
 
     return (
         <div>
@@ -89,9 +96,7 @@ const Login = () => {
              }
         </div>
     );
-    
 }
-
 
 export default Login;
 

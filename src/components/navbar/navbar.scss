@@ -30,7 +30,7 @@
  
 }
 
-#name{
+#name{  
  margin-left: 33%;
 }
 .navbar-brand{
@@ -43,6 +43,7 @@
 }
 
 #botao{
+    margin-top: 15px;
     color: #fff;
     cursor: pointer;
 }
@@ -71,7 +72,6 @@
 .nav-link{
     color: #fff;
     text-decoration: none;
-   
 }
 
 a:hover {
@@ -80,6 +80,7 @@ a:hover {
   } 
 
 .navbar-toggler{
+    
     background-color: #fff;
 }
 #navbarNav{

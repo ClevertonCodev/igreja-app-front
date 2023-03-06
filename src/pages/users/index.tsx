@@ -6,10 +6,11 @@ import axios from "axios";
 import React, { useEffect, useState } from "react"
 import Botao from "../../components/botao";
 import "./users.scss"
-import { useParams, Navigate, useNavigate, useLocation } from 'react-router-dom';
-import Token from "../../components/token";
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import Token from "../../components/token/Token";
 import Alas from "./adm/alas";
 import Navbar from "../../components/navbar";
+import Loader from "../../components/loader";
 
 
 
@@ -25,10 +26,12 @@ const Users = () => {
     const [telefone, setTelefone] = useState('');
     const [endereço, setEndereço] = useState('');
     const [alas_id, setAlasid] = useState('');
-    const { id } = useParams();
+    const [userId, setUserId] = useState('');
+    var { id } = useParams();
     const [paramentros, setParamentros] = useState('');
     const navigate = useNavigate();
     const [alas, setAlas] = useState<Alas[]>([]);
+    const [estaCarregando, setestaCarregando] = useState<boolean>(false);
     const data = {
 
         name: name,
@@ -45,13 +48,21 @@ const Users = () => {
     }
     const location = useLocation();
     const url = location.pathname;
+
     const voltar = () => {
         navigate('/adm/user');
     }
+
+    if(userId){
+        id= userId
+    }
+
+    console.log(id)
     useEffect(() => {
+        
 
         if (url == '/me') {
-
+            setestaCarregando(true)
             axios({
                 method: 'get',
                 url: 'http://127.0.0.1:8000/api/v1/me',
@@ -61,6 +72,7 @@ const Users = () => {
                 }
             })
                 .then((response: { data: any; }) => {
+                    setUserId(response.data.id)
                     setParamentros(response.data);
                     setName(response.data.name);
                     setEmail(response.data.email);
@@ -72,12 +84,14 @@ const Users = () => {
                     setEndereço(response.data.endereço);
                     setAlasid(response.data.alas_id);
                     setPassword(response.data.password);
+                    setestaCarregando(false)
                 })
                 .catch(function (error) {
-
+                    alert('Erro inesperado')
+                    setestaCarregando(false)
                 });
         }
-
+      
 
         axios({
             method: 'get',
@@ -91,8 +105,7 @@ const Users = () => {
 
             .then((resposta: { data: any; }) => {
                 setAlas(resposta.data);
-
-
+                
             })
 
         if (id) {
@@ -120,7 +133,7 @@ const Users = () => {
                     setEndereço(resposta.data.endereço);
                     setAlasid(resposta.data.alas_id);
                     setPassword(resposta.data.password);
-
+                    setestaCarregando(false)
                 })
         }
     }, [id]);
@@ -132,10 +145,10 @@ const Users = () => {
           return;
         }
       }
-console.log(name);
+    
     function FormUser(evento: React.FormEvent<HTMLFormElement>) {
         evento.preventDefault();
-
+        setestaCarregando(true)
         if (id) {
             axios({
                 method: 'patch',
@@ -156,6 +169,7 @@ console.log(name);
 
                 .catch(function (error) {
                     console.log(error)
+                    setestaCarregando(false)
                 });
 
         } else {
@@ -183,6 +197,7 @@ console.log(name);
                         setEndereço('');
                         setAlasid('');
                         setPassword('');
+                        setestaCarregando(false)
                     }
                 })
 
@@ -196,15 +211,14 @@ console.log(name);
                     if (error?.response?.data?.erro) {
                         alert(error.response.data.erro);
                     }
-
-                       
-                    
+                    setestaCarregando(false);
                 });
         }
     }
     return (
         <div>
             <Navbar />
+            { estaCarregando?<Loader/> :
             <div className="containeer">
                 <form onSubmit={FormUser} >
                     <div className="left">
@@ -329,9 +343,9 @@ console.log(name);
                     </div>
                 </form>
             </div>
+        }
         </div>
     );
-
 }
 
 export default Users;
