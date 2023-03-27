@@ -5,13 +5,13 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import axios from "axios";
 import { useState, useEffect } from "react";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useParams, useNavigate} from "react-router-dom";
 import Botao from "../../components/botao";
 import Loader from "../../components/loader";
 import Navbar from "../../components/navbar";
-import Token from "../../components/token/Token";
+import api from "../../services/Instance";
+import HandleInputkey from "../../services/Regexs/HandleInputkey";
 import Estacas from "../users/adm/estacas";
 
 const Caravanas = () => {
@@ -43,29 +43,15 @@ const Caravanas = () => {
   const voltar = () => {
     navigate("home");
   };
-
+  
   useEffect(() => {
-    axios({
-      method: "get",
-      url: `http://127.0.0.1:8000/api/v1/estacas`,
-      headers: {
-        Accept: "application/json",
-        Authorization: Token(),
-      },
-    }).then((resposta: { data: Estacas[] }) => {
+    api.get("/estacas").then((resposta: { data: Estacas[] }) => {
       setEstacas(resposta.data);
     });
 
     if (id) {
         setestaCarregando(true)
-      axios({
-        method: "get",
-        url: `http://127.0.0.1:8000/api/v1/caravanas/${id}`,
-        headers: {
-          Accept: "application/json",
-          Authorization: Token(),
-        },
-      }).then((resposta: { data: any }) => {
+      api.get(`caravanas/${id}`).then((resposta: { data: any }) => {
         setParamentros(resposta.data);
         setNome(resposta.data.Nome);
         setDestino(resposta.data.Destino);
@@ -83,17 +69,7 @@ const Caravanas = () => {
     evento.preventDefault();
     setestaCarregando(true)
     if (id) {
-      axios({
-        method: "patch",
-        url: `http://127.0.0.1:8000/api/v1/caravanas/${id}`,
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/x-www-form-urlencoded",
-          Authorization: Token(),
-        },
-        data: data,
-      })
-        .then((response: { data: any }) => {
+      api.patch(`/caravanas/${id}`, data).then((response: { data: any }) => {
           if (response.data) {
             setestaCarregando(false)
             alert("Atualizou com sucesso!");
@@ -103,20 +79,11 @@ const Caravanas = () => {
 
         .catch(function (error) {
           console.log(error);
+          setestaCarregando(false);
+          alert("erro inesperado");
         });
     } else {
-      axios({
-        method: "post",
-        url: "http://127.0.0.1:8000/api/v1/caravanas",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/x-www-form-urlencoded",
-          Authorization: Token(),
-        },
-
-        data: data,
-      })
-        .then((response: { data: any }) => {
+      api.post("/caravanas", data ).then((response: { data: any }) => {
           if (response.data) {
             setestaCarregando(false)
             alert("cadastrou com sucesso!");
@@ -132,7 +99,7 @@ const Caravanas = () => {
         })
 
         .catch(function (error) {
-          console.log(error);
+          alert("erro inesperado");
           if (error?.response?.data?.errors?.Status) {
             alert(error.response.data.errors.Status);
           }
@@ -145,12 +112,14 @@ const Caravanas = () => {
       {estaCarregando ? (
         <Loader />
       ) : (
-        <><h1 id="caravanas" >Caravanas</h1>
+        <>
+        <h1 id="caravanas" >Caravanas</h1>
         <div className="containeer">
             <form onSubmit={FormCaravanas}>
               <div className="left">
                 <TextField
                   type={"text"}
+                  onKeyPress={HandleInputkey}
                   value={nome}
                   onChange={(evento) => setNome(evento.target.value)}
                   label="Nome do lider"
@@ -160,10 +129,12 @@ const Caravanas = () => {
                 <TextField
                   type={"text"}
                   value={destino}
+                  onKeyPress={HandleInputkey}
                   onChange={(evento) => setDestino(evento.target.value)}
                   label="Destino"
                   variant="outlined"
                   required />
+
                 <TextField
                   type={"number"}
                   value={quantidade_passageiros}

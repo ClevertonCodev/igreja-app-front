@@ -1,13 +1,12 @@
 import { TextField } from "@mui/material";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Botao from "../../components/botao";
-import Header from "../../components/header";
 import Loader from "../../components/loader";
 import Navbar from "../../components/navbar";
-import Token from "../../components/token/Token";
+import api from "../../services/Instance";
 import './estacas.scss'
+import HandleInputkey from '../../services/Regexs/HandleInputkey';
 const EstacaS = () => {
     const navigate = useNavigate();
     const [nome, setNome] = useState('');
@@ -22,19 +21,8 @@ const EstacaS = () => {
 
     useEffect(() => {
         if (id) {
-
             setestaCarregando(true);
-
-            axios({
-                method: 'get',
-                url: `http://127.0.0.1:8000/api/v1/estacas/${id}`,
-                headers: {
-                    'Accept': 'application/json',
-                    'Authorization': Token()
-                }
-
-            })
-
+            api.get(`/estacas/${id}`)
                 .then((resposta: { data: any; }) => {
                     SetParamet(resposta.data);
                     setNome(resposta.data.nome);
@@ -50,24 +38,16 @@ const EstacaS = () => {
         evento.preventDefault(); 
         setestaCarregando(true)
         if (id) {
-            axios({
-                method: 'patch',
-                url: `http://127.0.0.1:8000/api/v1/estacas/${id}`,
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Authorization': Token()
-                },
-                data:data
-            })
+
+           api.patch(`/estacas/${id}`, data)
                 .then((response: { data: any; }) => {
                     if (response.data) {
                         setestaCarregando(false)
                         alert('Atualizou com sucesso!');
+                        console.log(response.data);
                         navigate("/adm/estacas")
                     }
                 })
-
                 .catch(function (error) {
                     setestaCarregando(false)
                     console.log(error)
@@ -75,18 +55,7 @@ const EstacaS = () => {
 
         }else{
             
-            axios({
-                method: 'post',
-                url: 'http://127.0.0.1:8000/api/v1/estacas',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Authorization': Token()
-                },
-                data:data
-            })
-    
-    
+            api.post(`/estacas`, data)
                 .then((response: { data: any; }) => {
     
                     if (response.data) {
@@ -119,6 +88,7 @@ const EstacaS = () => {
                             type={"text"}
                             value={nome}
                             onChange={evento => setNome(evento.target.value)}
+                            onKeyPress={HandleInputkey}
                             label="Nome da Ala"
                             variant="standard"
                             fullWidth

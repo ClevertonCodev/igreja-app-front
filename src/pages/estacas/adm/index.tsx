@@ -1,10 +1,9 @@
 import { Button } from "@mui/material";
-import axios from "axios";
 import React, {  useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import Loader from "../../../components/loader";
 import Navbar from "../../../components/navbar";
-import Token from "../../../components/token/Token";
+import api from "../../../services/Instance";
 import Estacas from "../../users/adm/estacas";
 
 const AdmEstacas = () => {
@@ -16,16 +15,7 @@ const AdmEstacas = () => {
     
     useEffect(()=>{
         setestaCarregando(true)
-        axios({
-            method: 'get',
-            url: 'http://127.0.0.1:8000/api/v1/estacas',
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': Token()
-            }
-            
-        })
-        .then((resposta: { data: any; }) => {
+        api.get('/estacas').then((resposta: { data: any; }) => {
             setEstacas(resposta.data)
             setestaCarregando(false)
    })
@@ -34,15 +24,7 @@ const AdmEstacas = () => {
 
     const excluir =(estacasExcluir:Estacas) => {
         setestaCarregando(true)
-        axios({
-            method: 'delete',
-            url: `http://127.0.0.1:8000/api/v1/estacas/${estacasExcluir.id}`,
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': Token()
-            }
-            
-        })
+        api.delete(`/estacas/${estacasExcluir}`)
         .then((excluir: { data: any; }) => {
            if(excluir.data.msg){
               setDeleteE(excluir.data.msg)

@@ -1,4 +1,3 @@
-// import './header.scss'
 import Simbolo from '../../img/Simbolo2.png'
 const Header = () => {
 

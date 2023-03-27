@@ -5,5 +5,5 @@ import Tipoveiculos from '../tipoveiculos/tipoveiculos';
     tipo_veiculos_id: Tipoveiculos[];
     name: string;
     quantidade_lugares: number;
-    veiculos: Iveiculos[];
+    tipo: string
  }

@@ -1,67 +1,53 @@
 import { Button } from "@mui/material";
-import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../../components/navbar";
-import Token from "../../../components/token/Token";
 import "../../users/users.scss";
 import Iveiculos from "../../veiculos/veiculos";
 import Caravana from "./caravanas";
 import "../tableModal.scss";
 import Loader from "../../../components/loader";
+import api from "../../../services/Instance";
+import CustomModal from "../../../components/modal";
+import DeleteAuto from "../../../services/DeleteAuto";
+
 
 const AdmCaravanas = () => {
   const navigate = useNavigate();
   const [caravanas, setCaravanas] = useState<Caravana[]>([]);
   const [veiculos, setVeiculos] = useState<Iveiculos[]>([]);
   const [veiculo, setVeiculo] = useState<Iveiculos[]>([]);
-  const caravanasVeiculo: Array<number> = [];
   const [VeiculosLivres, setVeiculosLivres] = useState<Iveiculos[]>([]);
   const [Idcaravana, SetIdcaravana] = useState<number>();
   const [veiculosSelecionado, setSelecionado] = useState<number[]>([]);
   const botaoRef = useRef<HTMLButtonElement>(null);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [showModal2, setShowModal2] = useState<boolean>(false);
   const [estaCarregando, setestaCarregando] = useState<boolean>(true);
+  const [modalcarregando, setestaModalcarregando] = useState<boolean>(true);
+
   useEffect(() => {
-    axios({
-      method: "get",
-      url: "http://127.0.0.1:8000/api/v1/caravanas",
-      headers: {
-        Accept: "application/json",
-        Authorization: Token(),
-      },
-    }).then((resposta: { data: Caravana[] }) => {
+    api.get("/caravanas").then((resposta: { data: Caravana[] }) => {
+      console.log(resposta.data);
       setCaravanas(resposta.data);
       setestaCarregando(false);
     });
 
-    axios
-      .get("http://127.0.0.1:8000/api/v1/veiculos", {
-        headers: {
-          Accept: "application/json",
-          Authorization: Token(),
-        },
-      })
-      .then((resposta: { data: Iveiculos[] }) => {
-        setVeiculos(resposta.data);
-      });
+    api.get("/veiculos").then((resposta: { data: Iveiculos[] }) => {
+      setVeiculos(resposta.data);
+    });
   }, [veiculo]);
 
   const excluir = (caravanaExcluir: Caravana) => {
     setestaCarregando(true);
-    axios({
-      method: "delete",
-      url: `http://127.0.0.1:8000/api/v1/caravanas/${caravanaExcluir.id}`,
-      headers: {
-        Accept: "application/json",
-        Authorization: Token(),
-      },
-    }).then((excluir: { data: any }) => {
-      if (excluir.data.msg) {
-        alert(excluir.data.msg);
-        setestaCarregando(true);
-        setVeiculo([]);
-      }
-    });
+    api.delete(`caravanas/${caravanaExcluir.id}`)
+      .then((excluir: { data: any }) => {
+        if (excluir.data.msg) {
+          alert(excluir.data.msg);
+          setestaCarregando(true);
+          setVeiculo([]);
+        }
+      });
   };
 
   const editar = (editar: Caravana) => {
@@ -70,29 +56,24 @@ const AdmCaravanas = () => {
     }
   };
 
-  const IDcaravanas = (idcaravana: Caravana) => {
-    SetIdcaravana(idcaravana.id);
 
-    caravanas.forEach((caravana) => {
-      caravana.veiculos.forEach((veiculosUsados) => {
-        caravanasVeiculo.push(veiculosUsados.id);
+  const IDcaravanas = (idcaravana : number | undefined) => {
+    SetIdcaravana(idcaravana);
+
+      api.get(`/caravanasveiculos/${idcaravana}`)
+      .then((resposta: { data: Iveiculos[] }) => {
+        setVeiculo(resposta.data);
+        setestaModalcarregando(false);
+        setestaCarregando(false);
       });
-    });
-    setVeiculosLivres(
-      veiculos.filter(
-        (veiculoEmUso) => !caravanasVeiculo.includes(veiculoEmUso.id)
-      )
-    );
-    axios({
-      method: "get",
-      url: `http://127.0.0.1:8000/api/v1/caravanasveiculos/${idcaravana.id}`,
-      headers: {
-        Accept: "application/json",
-        Authorization: Token(),
-      },
-    }).then((resposta: { data: Iveiculos[] }) => {
-      setVeiculo(resposta.data);
-    });
+    
+    
+
+    api.get(`/veiculoslivres/${idcaravana}`)
+      .then((resposta: { data: Iveiculos[] }) => {
+        console.log(resposta.data);
+        setVeiculosLivres(resposta.data);
+      });
   };
 
   function verificarselecionado(id: number) {
@@ -103,10 +84,7 @@ const AdmCaravanas = () => {
       setSelecionado(veiculosSelecionado.filter((item) => item !== id));
     }
   }
-  function handleClear() {
-    setSelecionado([]);
-  }
-
+ 
   const NewVeiculos = () => {
     botaoRef.current?.click();
     navigate("/veiculos");
@@ -115,7 +93,6 @@ const AdmCaravanas = () => {
   const Veiculos_Caravanas = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     const sendVehicle = veiculosSelecionado.toString();
-    console.log(sendVehicle);
     if (sendVehicle) {
       let resposta = window.confirm(
         "Você gostaria de casdastrar esse(s) veiculo(s)?"
@@ -124,19 +101,10 @@ const AdmCaravanas = () => {
       if (resposta) {
         const data = {
           veiculo: sendVehicle,
-        };
+        }
 
-        axios({
-          method: "post",
-          url: `http://127.0.0.1:8000/api/v1/adicionarveiculos/${Idcaravana}`,
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/x-www-form-urlencoded",
-            Authorization: Token(),
-          },
-
-          data: data,
-        })
+        api
+          .post(`/adicionarveiculos/${Idcaravana}`, data)
           .then((resposta: { data: Iveiculos[] }) => {
             alert("cadastrou com sucesso");
             setVeiculo([]);
@@ -153,6 +121,8 @@ const AdmCaravanas = () => {
         alert("tudo bem!");
         setSelecionado([]);
       }
+    }else{
+      alert("Click em algum veículo")
     }
   };
   return (
@@ -191,9 +161,12 @@ const AdmCaravanas = () => {
                     <td>
                       <Button
                         variant="outlined"
-                        onClick={() => IDcaravanas(resposta)}
-                        data-bs-toggle="modal"
-                        data-bs-target="#exampleModal"
+                        onClick={() => {
+                          IDcaravanas(resposta.id);
+                          setShowModal(true)
+                          setestaModalcarregando(true);
+                        }}
+                        
                       >
                         Ver veiculos
                       </Button>
@@ -202,6 +175,7 @@ const AdmCaravanas = () => {
                       <Button
                         variant="outlined"
                         onClick={() => editar(resposta)}
+                       
                       >
                         Editar
                       </Button>
@@ -220,103 +194,107 @@ const AdmCaravanas = () => {
               </tbody>
             </table>
           </div>
-          <div
-            className="modal fade bd-example-modal-lg"
-            id="exampleModal"
-            tabIndex="-1"
-            aria-labelledby="exampleModalLabel"
-            aria-hidden="true"
-          >
-            <div className="modal-dialog modal-lg">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <div className="container_titulo">
-                    <h1
-                      className="modal-title fs-5"
-                      id="exampleModalToggleLabel2"
-                    >
-                      Veiculos cadastrados
-                    </h1>
-                  </div>
-                  <button
+
+          <CustomModal 
+          show ={
+            showModal
+          }
+          onHide={
+           () => setShowModal(false)
+          }
+          title={
+            <h1 className="modal-title fs-5" id="exampleModalToggleLabel2">
+              Veiculos cadastrados
+            </h1>
+          }
+          headerclose={
+            <button
                     className="close-button"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                    onClick={handleClear}
-                  ></button>
-                </div>
-                <div className="modal-body">
-                  {JSON.stringify(veiculo) === "[]" ? (
-                    <div
-                      className="alert alert-danger"
-                      role="alert"
-                      id="alertred"
-                    >
-                      Essa caravana não tem nenhum veiculo cadastrado!
-                    </div>
-                  ) : (
-                    <table className="table" id="tableModal">
-                      <thead className="thead">
-                        <tr>
-                          <th scope="col">Nome</th>
-                          <th scope="col">Tipo Veiculo</th>
-                          <th scope="col">Quantidade de passageiros</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {veiculo.map((resposta) => (
-                          <tr className="tr" key={resposta.id}>
-                            <td>{resposta.tipo_veiculos["tipo"]}</td>
-                            <td>{resposta.name}</td>
-                            <td>{resposta.quantidade_lugares}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  )}
-                </div>
-                <div className="modal-footer">
-                  <Button
-                    variant="outlined"
-                    data-bs-target="#exampleModalToggle2"
-                    data-bs-toggle="modal"
+                    onClick={()=>{setShowModal(false);
+                                  setSelecionado([])}}
                   >
-                    {JSON.stringify(veiculo) === "[]"
-                      ? "Adicionar Veiculos"
-                      : "Adicionar um novo veiculo"}
-                  </Button>
-                </div>
-              </div>
+            </button>
+          }
+          content={
+            <>
+            {modalcarregando ? (
+          <Loader />
+            ) : (
+          JSON.stringify(veiculo) === "[]" ? (
+            <div className="alert alert-danger" role="alert" id="alertred">
+              Essa caravana não tem nenhum veiculo cadastrado!
             </div>
-          </div>
-          <div
-            className="modal fade"
-            id="exampleModalToggle2"
-            aria-hidden="true"
-            aria-labelledby="exampleModalToggleLabel2"
-            tabIndex="-1"
-          >
-            <div className="modal-dialog modal-lg">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <div className="container_titulo">
-                    <h1
-                      className="modal-title fs-5"
-                      id="exampleModalToggleLabel2"
-                    >
-                      Veiculos disponíveis
-                    </h1>
-                  </div>
-                  <button
+          ) : (
+            <table className="table" id="tableModal">
+              <thead className="thead">
+                <tr>
+                  <th scope="col">Nome</th>
+                  <th scope="col">Tipo Veiculo</th>
+                  <th scope="col">Quantidade de passageiros</th>
+                  <th scope="col">Excluir</th>
+                </tr>
+              </thead>
+              <tbody>
+                {veiculo.map((resposta) => (
+                  <tr className="tr" key={resposta.id}>
+                    <td>{resposta.name}</td>
+                    <td>{resposta.tipo_veiculos["tipo"]}</td>
+                    <td>{resposta.quantidade_lugares}</td>
+                    <Button
+                        variant="outlined"
+                        color="error"
+                        onClick={() =>  {DeleteAuto(resposta.id,          Idcaravana as number);
+                           setestaModalcarregando(true);
+                           IDcaravanas(Idcaravana)}}
+                      >
+                        Excluir
+                      </Button>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )
+        )}
+            </>
+          }
+
+         footerclose={
+          <Button
+            onClick={() => setShowModal2(true)}
+        > 
+          {JSON.stringify(veiculo) === "[]"
+            ? "Adicionar Veiculos"
+            : "Adicionar um novo veiculo"}
+        </Button>
+         }
+          />
+
+          <CustomModal 
+          show ={
+            showModal2
+          }
+          onHide={
+              () => setShowModal(false)
+          }
+          title={
+            <h1 className="modal-title fs-5" id="exampleModalToggleLabel2">
+              Veiculos disponíveis
+            </h1>
+          }
+          headerclose={
+            <button
                     ref={botaoRef}
                     className="close-button"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                    onClick={handleClear}
-                  ></button>
-                </div>
-                <div className="modal-body">
-                  <div className="conteiner_veiculos">
+                    onClick={()=> {setShowModal2(false);
+                                    setShowModal(false);
+                                    setSelecionado([])}}
+                  >
+            </button>
+
+          }
+          content={
+            <>
+            <div className="conteiner_veiculos">
                     {JSON.stringify(VeiculosLivres) !== "[]" ? (
                       VeiculosLivres.map((resposta) => (
                         <ul
@@ -345,26 +323,27 @@ const AdmCaravanas = () => {
                       </div>
                     )}
                   </div>
-                </div>
-                <div className="modal-footer">
-                  <Button
-                    variant="outlined"
-                    id="btn_veiculo"
-                    onClick={NewVeiculos}
-                  >
-                    Criar novo veiculo
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    onClick={Veiculos_Caravanas}
-                    id="btn_veiculo"
-                  >
-                    Cadastrar veiculo(s)
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
+            </>
+          }
+         footerclose={
+          <>
+          <Button
+          variant="outlined"
+          id="btn_veiculo"
+          onClick={NewVeiculos}
+        >
+          Criar novo veiculo
+        </Button>
+        <Button
+          variant="outlined"
+          onClick={Veiculos_Caravanas}
+          id="btn_veiculo"
+        >
+          Cadastrar veiculo(s)
+        </Button>
+        </>
+         }
+          />
         </main>
       )}
     </div>

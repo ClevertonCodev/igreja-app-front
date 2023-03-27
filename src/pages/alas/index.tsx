@@ -5,15 +5,15 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Botao from "../../components/botao";
 import Loader from "../../components/loader";
 import Navbar from "../../components/navbar";
-import Token from "../../components/token/Token";
+import api from "../../services/Instance";
 import Estacas from "../users/adm/estacas";
 import "./alas.scss";
+import HandleInputkey from '../../services/Regexs/HandleInputkey';
 
 const Alas = () => {
   const navigate = useNavigate();
@@ -30,26 +30,12 @@ const Alas = () => {
     estacas_id: estacas_id,
   };
   useEffect(() => {
-    axios({
-      method: "get",
-      url: `http://127.0.0.1:8000/api/v1/estacas`,
-      headers: {
-        Accept: "application/json",
-        Authorization: Token(),
-      },
-    }).then((resposta: { data: any }) => {
+    api.get('/estacas').then((resposta: { data: any }) => {
       setEstacas(resposta.data);
     });
     if (id) {
       setestaCarregando(true);
-      axios({
-        method: "get",
-        url: `http://127.0.0.1:8000/api/v1/alas/${id}`,
-        headers: {
-          Accept: "application/json",
-          Authorization: Token(),
-        },
-      }).then((resposta: { data: any }) => {
+      api.get(`/alas/${id}`).then((resposta: { data: any }) => {
         SetParamet(resposta.data);
         setNome(resposta.data.name);
         setEstacas_id(resposta.data.estacas_id);
@@ -63,38 +49,19 @@ const Alas = () => {
     evento.preventDefault();
     setestaCarregando(true);
     if (id) {
-      axios({
-        method: "patch",
-        url: `http://127.0.0.1:8000/api/v1/alas/${id}`,
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/x-www-form-urlencoded",
-          Authorization: Token(),
-        },
-        data: data,
-      })
+      api.patch(`/alas/${id}`, data)
         .then((response: { data: any }) => {
           if (response.data) {
             alert("Atualizou com sucesso!");
             navigate("/adm/alas");
           }
         })
-
         .catch(function (error) {
           console.log(error);
           setestaCarregando(false);
         });
     } else {
-      axios({
-        method: "post",
-        url: "http://127.0.0.1:8000/api/v1/alas",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/x-www-form-urlencoded",
-          Authorization: Token(),
-        },
-        data: data,
-      })
+      api.post('alas', data)
         .then((response: { data: any }) => {
           if (response.data) {
             alert("cadastrado com sucesso");
@@ -127,6 +94,7 @@ const Alas = () => {
                 type={"text"}
                 value={nome}
                 onChange={(evento) => setNome(evento.target.value)}
+                onKeyPress={HandleInputkey}
                 label="Nome da Ala"
                 variant="standard"
                 fullWidth

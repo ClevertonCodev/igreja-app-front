@@ -1,46 +1,37 @@
-import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Button } from "@mui/material";
-import axios from "axios";
+import { Button } from "@mui/material";
 import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../../components/navbar";
 import Users from './users';
-import Token from "../../../components/token/Token";
 import '../users.scss'
+import Loader from "../../../components/loader";
+import api from "../../../services/Instance";
 
 const AdmUser = () => {
     const navigate = useNavigate();
     const [users, setUsers] = useState<Users[]>([])
+    const [estaCarregando, setestaCarregando] = useState<boolean>(false);
+    const [reloud, setestaReloud] = useState<boolean>(false);
     
     useEffect(() => {
-        axios({
-            method: 'get',
-            url: 'http://127.0.0.1:8000/api/v1/users',
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': Token()
-            }
-
-        })
+        setestaCarregando(true);
+        api.get('/users')
             .then((resposta: { data: any; }) => {
                 setUsers(resposta.data)
+                setestaCarregando(false);
             })
 
-    }, []);
+    }, [reloud]);
 
     const excluir = (userExcluir: Users) => {
-        axios({
-            method: 'delete',
-            url: `http://127.0.0.1:8000/api/v1/users/${userExcluir.id}`,
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': Token()
-            }
-
-        })
+        setestaCarregando(true);
+        setestaReloud(false);
+        api.delete(`/users/${userExcluir.id}`)
             .then((excluir: { data: any; }) => {
+                setestaCarregando(true);
+                setestaReloud(true);
                 if (excluir.data.msg) {
                     alert(excluir.data.msg)
-                    window.location.reload()
                 }
 
             });
@@ -57,6 +48,7 @@ const AdmUser = () => {
     return (
         <div>
             <Navbar />
+            { estaCarregando?<Loader/>:
             <div className="rolagem">
 
                 <table className="table" >
@@ -102,6 +94,7 @@ const AdmUser = () => {
                     </tbody>
                 </table>
             </div>
+            }
         </div>
     );
 

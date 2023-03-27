@@ -2,25 +2,16 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./navbar.scss";
 import Simbolo from "../../img/Simbolo2.png";
 import useCookies from "react-cookie/cjs/useCookies";
-import { Link, useNavigate } from "react-router-dom";
+import {Link} from "react-router-dom";
 import UserData from "../../services/UserData";
-
+import logout from "../../services/Logout";
 
 const Navbar = () => {
-  var [cookie, setCookie, removeCookie] = useCookies(["token"]);
-  const navigate = useNavigate();
+  var [cookie, setCookie, removeCookie] = useCookies(["token",  "refreshtoken"]);
   var validate: boolean = false;
   const nome = UserData()?.name;
   const type = UserData()?.type;
-  
  
-
-  const logout = () => {
-    removeCookie("token");
-    navigate("/");
-    window.location.reload()
-  };
-
   if (type === "secretarios") {
     validate = true;
   }
@@ -82,6 +73,11 @@ const Navbar = () => {
                       to="/adm/caravanas"
                     >
                       Administração
+                    </Link>
+                  </li>
+                  <li>
+                    <Link id="botao" className="dropdown-item" to="/veiculos">
+                      Cadastrar novo veiculo
                     </Link>
                   </li>
                 </ul>
@@ -175,9 +171,9 @@ const Navbar = () => {
               className="nav-i
               tem"
             >
-              <p id="botao" className="nav-link" onClick={logout}>
+              <a id="botao" className="nav-link" onClick={() => logout()}>
                 Sair
-              </p>
+              </a>
             </li>
           </ul>
         </div>
