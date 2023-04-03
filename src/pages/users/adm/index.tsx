@@ -1,11 +1,11 @@
 import { Button } from "@mui/material";
 import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
-import Navbar from "../../../components/navbar";
 import Users from './users';
 import '../users.scss'
 import Loader from "../../../components/loader";
 import api from "../../../services/Instance";
+import Layout from "../../../components/layout";
 
 const AdmUser = () => {
     const navigate = useNavigate();
@@ -46,8 +46,8 @@ const AdmUser = () => {
 
 
     return (
+        <Layout title="Usuarios">
         <div>
-            <Navbar />
             { estaCarregando?<Loader/>:
             <div className="rolagem">
 
@@ -96,6 +96,7 @@ const AdmUser = () => {
             </div>
             }
         </div>
+        </Layout>
     );
 
 }

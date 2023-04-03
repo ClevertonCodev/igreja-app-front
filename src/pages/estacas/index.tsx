@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Botao from "../../components/botao";
 import Loader from "../../components/loader";
-import Navbar from "../../components/navbar";
 import api from "../../services/Instance";
 import './estacas.scss'
 import HandleInputkey from '../../services/Regexs/HandleInputkey';
+import Layout from "../../components/layout";
 const EstacaS = () => {
     const navigate = useNavigate();
     const [nome, setNome] = useState('');
@@ -77,8 +77,8 @@ const EstacaS = () => {
 
 
     return (
+        <Layout title="Cadastrar Estacas">
         <div className="body">
-            <Navbar/>
             {estaCarregando ? <Loader/> :
             <main id="estacas">
                 <h1 className="estacas">Estacas</h1>
@@ -109,6 +109,7 @@ const EstacaS = () => {
             </main>
             }
         </div>
+        </Layout>
     );
 
 }

@@ -6,6 +6,7 @@ import Loader from "../../../components/loader";
 import Navbar from "../../../components/navbar";
 import Token from "../../../components/token/Token";
 import Alas from "../../users/adm/alas";
+import Layout from "../../../components/layout";
 
 const AdmAlas = () => {
     const navigate = useNavigate();
@@ -60,8 +61,8 @@ const AdmAlas = () => {
 
     }
     return (
+        <Layout title="Alas">
         <div>
-         <Navbar />
          { estaCarregando? <Loader/> : 
          <div className="rolagem">
 
@@ -100,6 +101,7 @@ const AdmAlas = () => {
          </div>
          }
      </div>
+     </Layout>
     );
 }
 

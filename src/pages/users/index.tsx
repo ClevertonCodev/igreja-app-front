@@ -7,13 +7,13 @@ import Botao from "../../components/botao";
 import "./users.scss";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import Alas from "./adm/alas";
-import Navbar from "../../components/navbar";
 import Loader from "../../components/loader";
 import HandleInputkey from "../../services/Regexs/HandleInputkey";
 import api from "../../services/Instance";
 import HandlerCpf from "../../services/Regexs/HandlerCPF";
 import HandleRG from "../../services/Regexs/HandleRG";
 import HandleMobileNumber from "../../services/Regexs/HandleMobileNumber";
+import Layout from "../../components/layout";
 
 const Users = () => {
   const [name, setName] = useState("");
@@ -34,7 +34,6 @@ const Users = () => {
   const [estaCarregando, setestaCarregando] = useState<boolean>(false);
   const data = {
     name: name,
-    password: password,
     email: email,
     active: active,
     type: type,
@@ -43,10 +42,12 @@ const Users = () => {
     telefone: telefone.replace(/\D/g, ""),
     endereço: endereço,
     alas_id: alas_id,
+    ...(id ? {} : { password: password }),
   };
+
+  console.log(data);
   const location = useLocation();
   const url = location.pathname;
-  console.log(data);
   const voltar = () => {
     navigate("/adm/user");
   };
@@ -171,8 +172,8 @@ const Users = () => {
     }
   }
   return (
+    <Layout title="Usuario">
     <div>
-      <Navbar />
       {estaCarregando ? (
         <Loader />
       ) : (
@@ -188,7 +189,7 @@ const Users = () => {
                 variant="outlined"
                 required
               />
-
+              {!id ? (
               <TextField
                 type={"password"}
                 value={password}
@@ -196,7 +197,8 @@ const Users = () => {
                 label="Senha"
                 variant="outlined"
                 required
-              />
+              /> 
+                ) : null}
               <TextField
                 type={"email"}
                 value={email}
@@ -301,6 +303,7 @@ const Users = () => {
         </div>
       )}
     </div>
+    </Layout>
   );
 };
 

@@ -13,6 +13,7 @@ import Navbar from "../../components/navbar";
 import api from "../../services/Instance";
 import HandleInputkey from "../../services/Regexs/HandleInputkey";
 import Estacas from "../users/adm/estacas";
+import Layout from "../../components/layout";
 
 const Caravanas = () => {
   const [nome, setNome] = useState("");
@@ -107,8 +108,8 @@ const Caravanas = () => {
     }
   }
   return (
+    <Layout title="Cadastrar Caravanas">
     <div>
-      <Navbar />
       {estaCarregando ? (
         <Loader />
       ) : (
@@ -215,6 +216,7 @@ const Caravanas = () => {
           </div></>
       )}
     </div>
+    </Layout>
   );
 };
 export default Caravanas;

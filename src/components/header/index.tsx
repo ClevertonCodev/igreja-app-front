@@ -1,4 +1,4 @@
-import Simbolo from '../../img/Simbolo2.png'
+import Simbolo from '../../assets/Simbolo2.png'
 const Header = () => {
 
     return(

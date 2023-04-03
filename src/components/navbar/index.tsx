@@ -1,6 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./navbar.scss";
-import Simbolo from "../../img/Simbolo2.png";
+import Simbolo from "../../assets/Simbolo2.png";
 import useCookies from "react-cookie/cjs/useCookies";
 import {Link} from "react-router-dom";
 import UserData from "../../services/UserData";
@@ -78,6 +78,11 @@ const Navbar = () => {
                   <li>
                     <Link id="botao" className="dropdown-item" to="/veiculos">
                       Cadastrar novo veiculo
+                    </Link>
+                  </li>
+                  <li>
+                    <Link id="botao" className="dropdown-item" to="/tiposveiculos">
+                      Cadastrar novo tipo de veiculo
                     </Link>
                   </li>
                 </ul>

@@ -10,6 +10,7 @@ import Loader from "../../../components/loader";
 import api from "../../../services/Instance";
 import CustomModal from "../../../components/modal";
 import DeleteAuto from "../../../services/DeleteAuto";
+import Layout from "../../../components/layout";
 
 
 const AdmCaravanas = () => {
@@ -126,8 +127,8 @@ const AdmCaravanas = () => {
     }
   };
   return (
+    <Layout title="Caravanas">
     <div>
-      <Navbar />,
       {estaCarregando ? (
         <Loader />
       ) : (
@@ -347,6 +348,7 @@ const AdmCaravanas = () => {
         </main>
       )}
     </div>
+    </Layout>
   );
 };
 export default AdmCaravanas;

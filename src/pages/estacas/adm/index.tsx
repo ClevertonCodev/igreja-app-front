@@ -2,9 +2,9 @@ import { Button } from "@mui/material";
 import React, {  useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import Loader from "../../../components/loader";
-import Navbar from "../../../components/navbar";
 import api from "../../../services/Instance";
 import Estacas from "../../users/adm/estacas";
+import Layout from "../../../components/layout";
 
 const AdmEstacas = () => {
     const navigate = useNavigate();
@@ -43,8 +43,8 @@ const AdmEstacas = () => {
     
         
     return (
+        <Layout title="Estacas">
          <div>
-         <Navbar />
          {estaCarregando ? <Loader/> : 
          <div className="rolagem">
 
@@ -79,6 +79,7 @@ const AdmEstacas = () => {
          </div>
         }
      </div>
+     </Layout>
     );
  
 }

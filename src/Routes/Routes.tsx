@@ -16,6 +16,7 @@ import AdmUser from "../pages/users/adm";
 import Caravanas from "../pages/caravanas";
 import AdmCaravanas from "../pages/caravanas/adm";
 import Veiculos from "../pages/veiculos";
+import TiPoveiculos from "../pages/tipoveiculos";
 
 export default function AppRouter() {
   return (
@@ -38,6 +39,7 @@ export default function AppRouter() {
           <Route path="/adm/caravanas" element={<AdmCaravanas />} />
           <Route path="/adm/caravanas/:id" element={<Caravanas />} />
           <Route path='/veiculos' element={<Veiculos/>}/>
+          <Route path='/tiposveiculos' element={<TiPoveiculos/>}/>
         </Route>
         <Route path="/*" element={<Login />} />
       </Routes>

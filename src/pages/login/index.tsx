@@ -54,6 +54,7 @@ const Login = () => {
 
   return (
     <div>
+      <title>Login</title>
       <Header />
       {estaCarregando ? (
         <Loader />

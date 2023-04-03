@@ -9,11 +9,12 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Botao from "../../components/botao";
 import Loader from "../../components/loader";
-import Navbar from "../../components/navbar";
 import api from "../../services/Instance";
 import Estacas from "../users/adm/estacas";
 import "./alas.scss";
 import HandleInputkey from '../../services/Regexs/HandleInputkey';
+import Layout from "../../components/layout";
+;
 
 const Alas = () => {
   const navigate = useNavigate();
@@ -81,8 +82,8 @@ const Alas = () => {
   };
 
   return (
+    <Layout title="Cadastrar Alas">
     <div>
-      <Navbar />
       {estaCarregando ? (
         <Loader />
       ) : (
@@ -147,6 +148,7 @@ const Alas = () => {
         </>
       )}
     </div>
+    </Layout>
   );
 };
 
